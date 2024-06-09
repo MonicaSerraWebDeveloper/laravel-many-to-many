@@ -9,6 +9,8 @@ use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Type;
+use App\Models\Technology;
+
 
 
 class PortfolioController extends Controller
@@ -91,7 +93,7 @@ class PortfolioController extends Controller
      */
     public function show(Portfolio $portfolio)
     {
-        
+
         $data = [
 
             'portfolio' => $portfolio
