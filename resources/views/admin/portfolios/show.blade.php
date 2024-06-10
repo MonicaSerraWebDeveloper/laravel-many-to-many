@@ -9,6 +9,15 @@
     <div class="pb-3"><strong>Slug: </strong>{{ $portfolio->slug }}</div>
     <div class="pb-3"><strong>Type: </strong>{{ $portfolio->type ? $portfolio->type->name : 'There is no type specify' }}</div>
     <div class="pb-3"><strong>Client Name: </strong>{{ $portfolio->client_name }}</div>
+    <div class="pb-3"><strong>Tags: </strong>
+    @if (count($portfolio->technologies) > 0)
+        @foreach ($portfolio->technologies as $technology)
+            {{ $technology->name }}@if (!$loop->last), @endif
+        @endforeach
+    @else
+        No tag
+    @endif
+    </div>
     <img style="width: 500px;" src="{{ asset('storage/' . $portfolio->cover_image) }}" alt="{{ $portfolio->name }}">
     <p>{{ $portfolio->summary }}</p>
     <div class="pb-3">
