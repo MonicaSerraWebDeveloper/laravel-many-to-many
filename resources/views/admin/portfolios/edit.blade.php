@@ -28,10 +28,26 @@
             <select id="type_id" class="form-select" name="type_id">
                 <option value="">Choose typology</option>
                 @foreach ($types as $type)
-                    <option @selected($type->id == old('type_id', $portfolio->type_id)) value="{{ $type->id }}">{{ $type->name }}</option>
+                    <option value="{{ $type->id }}">{{ $type->name }}</option>
                 @endforeach
             </select>
         <div>
+
+        <p class="my-3">Technologies:</p>
+        @foreach ($technologies as $technology)
+            <div class="form-check">
+                @if ($errors->any())
+                <!-- Vale per gli errori commessi nella modifica di un post -->
+                    <input @checked(in_array($technology->id, old('technologies', []))) class="form-check-input" type="checkbox" name="technologies[]" value="{{ $technology->id }}" id="{{ $technology->name }}">
+                @else 
+                <!-- Vale per l'utente che è appena entrato in pagina -->
+                    <input @checked($portfolio->technologies->contains($technology)) class="form-check-input" type="checkbox" name="technologies[]" value="{{ $technology->id }}" id="{{ $technology->name }}">
+                @endif
+                <label class="form-check-label" for="{{ $technology->name }}">
+                    {{ $technology->name }}
+                </label>
+            </div>
+        @endforeach
 
         <div class="mb-3">
             <label for="cover_image" class="form-label">Cambia immagine</label>

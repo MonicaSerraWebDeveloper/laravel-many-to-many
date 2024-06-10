@@ -116,12 +116,13 @@ class PortfolioController extends Controller
     public function edit(Portfolio $portfolio)
     {
         $type = Type::all();
+        $technologies = Technology::all();
 
         $data = [
             'types' => $type,
         ];
 
-        return view('admin.portfolios.edit', compact('portfolio'), $data);
+        return view('admin.portfolios.edit', compact('portfolio', 'technologies'), $data);
     }
 
     /**
@@ -146,6 +147,7 @@ class PortfolioController extends Controller
                 'summary' => 'nullable|min:10|max:2000',
                 'cover_image' => 'nullable|image|max:512',
                 'type_id' => 'nullable|exists:types,id',
+                'technologies' => 'nullable|exists:technologies,id',
             ]
         );
 
@@ -162,6 +164,12 @@ class PortfolioController extends Controller
 
         $formData['slug'] = Str::slug($formData['name'], '-');
         $portfolio->update($formData); 
+
+        if($request->has('technologies')) {
+            $portfolio->technologies()->sync($formData['technologies']);
+        } else {
+            $portfolio->technologies()->detach();
+        }
 
         return redirect()->route('admin.portfolios.show', ['portfolio' => $portfolio->slug]);
     }
