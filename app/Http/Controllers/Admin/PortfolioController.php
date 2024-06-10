@@ -39,12 +39,13 @@ class PortfolioController extends Controller
     public function create()
     {
         $type = Type::all();
+        $technologies = Technology::all();
 
         $data = [
             'types' => $type,
         ];
 
-        return view('admin.portfolios.create', $data);
+        return view('admin.portfolios.create', $data, compact('technologies'));
     }
 
     /**
@@ -67,7 +68,6 @@ class PortfolioController extends Controller
 
         $formData = $request->all();
 
-
         if($request->hasFile('cover_image')) {
 
             $img_path = Storage::disk('public')->put('upload_images', $formData['cover_image']);
@@ -75,12 +75,16 @@ class PortfolioController extends Controller
             $formData['cover_image'] = $img_path;
             
         }
-
-
+        
         $newPortfolio = new Portfolio();
         $newPortfolio->fill($formData);
         $newPortfolio->slug = Str::slug($newPortfolio->name, '-');
         $newPortfolio->save();
+
+        
+        if($request->has('technologies')) {
+            $newPortfolio->technologies()->attach($formData['technologies']);
+        }
 
         return redirect()->route('admin.portfolios.show', ['portfolio' => $newPortfolio->slug]);
     }
