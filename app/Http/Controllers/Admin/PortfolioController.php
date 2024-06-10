@@ -63,6 +63,7 @@ class PortfolioController extends Controller
                 'summary' => 'nullable|min:10|max:2000',
                 'cover_image' => 'nullable|image|max:512',
                 'type_id' => 'nullable|exists:types,id',
+                'technologies' => 'nullable|exists:technologies,id',
             ]
         );
 
